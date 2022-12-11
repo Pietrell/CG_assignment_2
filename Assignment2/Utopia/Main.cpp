@@ -391,9 +391,9 @@ void INIT_VAO(void)
 	{
 		crea_VAO_Vector_MeshObj(&Model3D[i]);
 		Model3D[i].ModelM = mat4(1.0);
-		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(0.0, 2.0, 24.0));
+		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(-30.0, 7.0, 0.0));
 		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(8.0, 8.0, 8.0));
-		Model3D[i].ModelM = rotate(Model3D[i].ModelM, radians(180.0f), vec3(0.0, 1.0, 0.0));
+		Model3D[i].ModelM = rotate(Model3D[i].ModelM, radians(90.0f), vec3(0.0, 1.0, 0.0));
 		Model3D[i].nome = "Pochita";
 		Model3D[i].sceltaVS = 1;
 		Model3D[i].sceltaFS = 5;
@@ -406,7 +406,7 @@ void INIT_VAO(void)
 	Model3D.clear();
 
 	//divano
-	name = "pochita.obj";
+	name = "divano.obj";
 	path = meshDir + name;
 	obj = loadAssImp(path.c_str(), Model3D);
 
@@ -415,10 +415,10 @@ void INIT_VAO(void)
 	{
 		crea_VAO_Vector_MeshObj(&Model3D[i]);
 		Model3D[i].ModelM = mat4(1.0);
-		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(0.0, 2.0, 24.0));
-		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(8.0, 8.0, 8.0));
+		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(0.0, 3.0, -35.0));
+		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(30.0));
 		Model3D[i].ModelM = rotate(Model3D[i].ModelM, radians(180.0f), vec3(0.0, 1.0, 0.0));
-		Model3D[i].nome = "Pochita";
+		Model3D[i].nome = "Divano";
 		Model3D[i].sceltaVS = 1;
 		Model3D[i].sceltaFS = 5;
 
