@@ -93,7 +93,7 @@ static vector<Material> materials;
 static vector<Shader> shaders;
 
 // Luce
-float angolo = 0.0;
+float angolo = 90.0;
 point_light light;
 LightShaderUniform light_unif = {};
 
@@ -118,9 +118,9 @@ void INIT_SHADER(void)
 void INIT_Illuminazione()
 {
 	// Setup della luce
-	light.position = {0.0, 30.0, 12.0};
+	light.position = {-10.0, 25.0, 25.0};
 	light.color = {1.0, 1.0, 1.0};
-	light.power = 2.5f;
+	light.power = 3.0f;
 
 	// Setup dei materiali
 	materials.resize(8);
@@ -268,7 +268,8 @@ void INIT_VAO(void)
 	string name, path;
 
 	// Cubemap
-	Mesh Pavimento, pareteSx, pareteBck, Sky;
+	Mesh Sky, Pavimento, pareteSx, pareteBck;
+	Mesh divano, baseTavolo, pianoTavolo, sopCono, sfera;
 
 	// SkyBox
 	cubemapTexture = loadCubemap(faces, 0);
@@ -285,8 +286,8 @@ void INIT_VAO(void)
 	Pavimento.nome = "Pavimento";
 	Pavimento.ModelM = mat4(1.0);
 	Pavimento.ModelM = translate(Pavimento.ModelM, vec3(0.0, 0.0, 0.0));
-	Pavimento.ModelM = rotate(Pavimento.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
-	Pavimento.ModelM = scale(Pavimento.ModelM, vec3(100.0f, 1.0f, 100.0f));
+	Pavimento.ModelM = rotate(Pavimento.ModelM, radians(90.0f), vec3(1.0, 0.0, 0.0));
+	Pavimento.ModelM = scale(Pavimento.ModelM, vec3(50.0f, 50.0f, 1.0f));
 	Pavimento.sceltaVS = 1;
 	Pavimento.sceltaFS = 1;
 	Pavimento.material = MaterialType::NO_MATERIAL;
@@ -298,43 +299,89 @@ void INIT_VAO(void)
 	crea_VAO_Vector(&pareteSx);
 	pareteSx.nome = "pareteSx";
 	pareteSx.ModelM = mat4(1.0);
-	pareteSx.ModelM = translate(pareteSx.ModelM, vec3(0.0, 10.0, 10.0));
+	pareteSx.ModelM = translate(pareteSx.ModelM, vec3(-50.0, 50.0, 0.0));
 	//pareteSx.ModelM = rotate(pareteSx.ModelM, radians(0.0f), vec3(1.0, 0.0, 0.0));
-	pareteSx.ModelM = scale(pareteSx.ModelM, vec3(10.0f, 10.0f, 10.0f));
+	pareteSx.ModelM = scale(pareteSx.ModelM, vec3(1.0f, 50.0f, 50.0f));
 	pareteSx.sceltaVS = 1;
 	pareteSx.sceltaFS = 1;
-	pareteSx.material = MaterialType::NO_MATERIAL;
+	pareteSx.material = MaterialType::ROSA;
 	Scena.push_back(pareteSx);
 
 	//parete back
-	crea_cilindro(&pareteBck, vec4(1.0));
+	crea_cubo(&pareteBck, vec4(1.0));
 	crea_VAO_Vector(&pareteBck);
 	pareteBck.nome = "pareteBck";
 	pareteBck.ModelM = mat4(1.0);
-	pareteBck.ModelM = translate(pareteBck.ModelM, vec3(0.0, 10.0, 10.0));
+	pareteBck.ModelM = translate(pareteBck.ModelM, vec3(0.0, 50.0, -50.0));
 	//pareteBck.ModelM = rotate(pareteBck.ModelM, radians(0.0f), vec3(1.0, 0.0, 0.0));
-	pareteBck.ModelM = scale(pareteBck.ModelM, vec3(10.0f, 10.0f, 10.0f));
+	pareteBck.ModelM = scale(pareteBck.ModelM, vec3(50.0f, 50.0f, 1.0f));
 	pareteBck.sceltaVS = 1;
 	pareteBck.sceltaFS = 1;
-	pareteBck.material = MaterialType::NO_MATERIAL;
+	pareteBck.material = MaterialType::ROSA;
 	Scena.push_back(pareteBck);
 
+#pragma endregion
+
+#pragma region Tavolo
+
+
+//piana
+	crea_piano(&pianoTavolo, vec4(1.0));
+	crea_VAO_Vector(&pianoTavolo);
+	pianoTavolo.nome = "pianoTavolo";
+	pianoTavolo.ModelM = mat4(1.0);
+	pianoTavolo.ModelM = translate(pianoTavolo.ModelM, vec3(0.0, 10.1, 0.0));
+	pianoTavolo.ModelM = scale(pianoTavolo.ModelM, vec3(20.0f, 20.0f, 20.0f));
+	pianoTavolo.ModelM = rotate(pianoTavolo.ModelM, radians(90.0f), vec3(1.0, 0.0, 0.0));
+	pianoTavolo.sceltaVS = 1;
+	pianoTavolo.sceltaFS = 1;
+	pianoTavolo.material = MaterialType::EMERALD;
+	Scena.push_back(pianoTavolo);
+
+//base
+	crea_cono(&sopCono, vec4(1.0, 0.0, 0.0, 1.0));
+	crea_VAO_Vector(&sopCono);
+	sopCono.nome = "sopCono";
+	sopCono.ModelM = mat4(1.0);
+	sopCono.ModelM = translate(sopCono.ModelM, vec3(0.0, 0.0, 0.0));
+	sopCono.ModelM = scale(sopCono.ModelM, vec3(10.0f, 10.0f, 10.0f));
+	//sopCono.ModelM = rotate(sopCono.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
+	sopCono.sceltaVS = 1;
+	sopCono.sceltaFS = 1;
+	sopCono.material = MaterialType::RED_PLASTIC;
+	Scena.push_back(sopCono);
+
+	//soprammobile base
+	crea_cilindro(&baseTavolo, vec4(1.0));
+	crea_VAO_Vector(&baseTavolo);
+	baseTavolo.ModelM = mat4(1.0);
+	baseTavolo.ModelM = translate(baseTavolo.ModelM, vec3(-10.0, 10.1, 0.0));
+	baseTavolo.ModelM = scale(baseTavolo.ModelM, vec3(3.0, 8.0, 3.0));
+	baseTavolo.nome = "baseTavolo";
+	baseTavolo.material = MaterialType::MARRONE;
+	baseTavolo.sceltaVS = 1;
+	baseTavolo.sceltaFS = 1;
+	Scena.push_back(baseTavolo);
+
+
+#pragma endregion
+	
+
+
+
+
+#pragma region Textures
+// texture mattoni
+	name = "mattoni.jpg";
+	path = imageDir + name;
+	textureMattoni = loadTexture(path.c_str(), 0);
 
 #pragma endregion
 
 
 
+#pragma region obj
 
-
-	// texture mattoni
-	name = "mattoni.jpg";
-	path = imageDir + name;
-	textureMattoni = loadTexture(path.c_str(), 0);
-
-
-
-
-	
 	name = "pochita.obj";
 	path = meshDir + name;
 	obj = loadAssImp(path.c_str(), Model3D);
@@ -358,14 +405,53 @@ void INIT_VAO(void)
 	ScenaObj.push_back(Model3D);
 	Model3D.clear();
 
+	//divano
+	name = "pochita.obj";
+	path = meshDir + name;
+	obj = loadAssImp(path.c_str(), Model3D);
+
+	nmeshes = Model3D.size();
+	for (int i = 0; i < nmeshes; i++)
+	{
+		crea_VAO_Vector_MeshObj(&Model3D[i]);
+		Model3D[i].ModelM = mat4(1.0);
+		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(0.0, 2.0, 24.0));
+		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(8.0, 8.0, 8.0));
+		Model3D[i].ModelM = rotate(Model3D[i].ModelM, radians(180.0f), vec3(0.0, 1.0, 0.0));
+		Model3D[i].nome = "Pochita";
+		Model3D[i].sceltaVS = 1;
+		Model3D[i].sceltaFS = 5;
+
+		//le bounding box vengono calcolate per ogni elemento della mesh invece che per la mesh completa
+		Model3D[i].boundingBoxMax = TrovaMax(&Model3D[i]);
+		Model3D[i].boundingBoxMin = TrovaMin(&Model3D[i]);
+	}
+	ScenaObj.push_back(Model3D);
+	Model3D.clear();
+
+
+
+#pragma endregion
+	
+
+
+
+
+	
+	
+
+
+
+
+
 }
 
 void INIT_CAMERA_PROJECTION(void)
 {
 	// Imposto la telecamera
 	ViewSetup = {};
-	ViewSetup.position = vec4(0.0, 0.5, 70.0, 0.0);
-	ViewSetup.target = vec4(0.0, 0.0, 0.0, 0.0);
+	ViewSetup.position = vec4(150.0, 150.0, 150.0, 0.0);
+	ViewSetup.target = vec4(-50.0, 0.0, -50.0, 0.0);
 	ViewSetup.direction = ViewSetup.target - ViewSetup.position;
 	ViewSetup.upVector = vec4(0.0, 1.0, 0.0, 0.0);
 
