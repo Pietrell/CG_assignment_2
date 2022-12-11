@@ -144,13 +144,13 @@ void crea_piramide(Mesh *mesh)
 
 void crea_piano(Mesh *mesh, vec4 color)
 {
-	mesh->vertici.push_back(vec3(-0.5, 0.0, 0.5));
+	mesh->vertici.push_back(vec3(-1.0, 1.0, 0.0));
 	mesh->colori.push_back(color);
-	mesh->vertici.push_back(vec3(0.5, 0.0, 0.5));
+	mesh->vertici.push_back(vec3(1.0, 1.0, 0.0));
 	mesh->colori.push_back(color);
-	mesh->vertici.push_back(vec3(0.5, 0.0, -0.5));
+	mesh->vertici.push_back(vec3(1.0, -1.0, 0.0));
 	mesh->colori.push_back(color);
-	mesh->vertici.push_back(vec3(-0.5, 0.0, -0.5));
+	mesh->vertici.push_back(vec3(-1.0, -1.0, 0.0));
 	mesh->colori.push_back(color);
 
 	mesh->indici.push_back(0);
