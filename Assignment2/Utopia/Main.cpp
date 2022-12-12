@@ -46,8 +46,8 @@ int selected_obj = 0;
 static unsigned int programId, programId_text, programId1, MatrixProj, MatModel, MatView;
 static unsigned int lsceltaFS, lsceltaVS, loc_texture, MatViewS, MatrixProjS;
 static unsigned int loc_view_pos, MatModelR, MatViewR, MatrixProjR, loc_view_posR, loc_cubemapR;
-unsigned int  textureMattoni, cubemapTexture, programIdr;
-
+unsigned int   cubemapTexture, programIdr;
+unsigned int textureMattoni, textureAssi, texturePelle, textureMarmo;
 // Camera
 string Operazione;
 vec3 asse = vec3(0.0, 1.0, 0.0);
@@ -93,7 +93,7 @@ static vector<Material> materials;
 static vector<Shader> shaders;
 
 // Luce
-float angolo = 90.0;
+float angolo = 300.0;
 point_light light;
 LightShaderUniform light_unif = {};
 
@@ -118,9 +118,9 @@ void INIT_SHADER(void)
 void INIT_Illuminazione()
 {
 	// Setup della luce
-	light.position = {-10.0, 25.0, 25.0};
+	light.position = {-10.0, 25.0, 0.0};
 	light.color = {1.0, 1.0, 1.0};
-	light.power = 3.0f;
+	light.power = 1.0f;
 
 	// Setup dei materiali
 	materials.resize(8);
@@ -168,7 +168,7 @@ void INIT_Illuminazione()
 
 	materials[MaterialType::NO_MATERIAL].name = "NO_MATERIAL";
 	materials[MaterialType::NO_MATERIAL].ambient = glm::vec3(1, 1, 1);
-	materials[MaterialType::NO_MATERIAL].diffuse = glm::vec3(0, 0, 0);
+	materials[MaterialType::NO_MATERIAL].diffuse = glm::vec3(0.1, 0.1, 0.1);
 	materials[MaterialType::NO_MATERIAL].specular = glm::vec3(0, 0, 0);
 	materials[MaterialType::NO_MATERIAL].shininess = 1.f;
 
@@ -187,7 +187,7 @@ void INIT_Illuminazione()
 	shaders[ShaderOption::ONDE_SHADING].name = "ONDE SHADING";
 
 	shaders[ShaderOption::BANDIERA_SHADING].value = 4;
-	shaders[ShaderOption::BANDIERA_SHADING].name = "BANDIERA SHADING";
+	shaders[ShaderOption::BANDIERA_SHADING].name = "CARTOON SHADING";
 }
 
 void crea_VAO_Vector_MeshObj(MeshObj *mesh)
@@ -269,9 +269,9 @@ void INIT_VAO(void)
 
 	// Cubemap
 	Mesh Sky, Pavimento, pareteSx, pareteBck;
-	Mesh divano, baseTavolo, pianoTavolo, sopCono, sfera;
+	Mesh divano, baseTavolo, pianoTavolo, sopCono, sfera, toro;
 
-	// SkyBox
+	// SkyBox | 0
 	cubemapTexture = loadCubemap(faces, 0);
 	crea_cubo(&Sky, vec4(0.1));
 	crea_VAO_Vector(&Sky);
@@ -280,7 +280,7 @@ void INIT_VAO(void)
 
 #pragma region Pareti
 
-	// Pavimento
+	// Pavimento | 1
 	crea_piano(&Pavimento, vec4(1.0));
 	crea_VAO_Vector(&Pavimento);
 	Pavimento.nome = "Pavimento";
@@ -293,22 +293,22 @@ void INIT_VAO(void)
 	Pavimento.material = MaterialType::NO_MATERIAL;
 	Scena.push_back(Pavimento);
 
-	//Parete sx
+	//Parete sx | 2
 
-	crea_cubo(&pareteSx, vec4(1.0));
+	crea_cubo(&pareteSx, vec4(1.0, 1.0, 1.0, 0.5));
 	crea_VAO_Vector(&pareteSx);
 	pareteSx.nome = "pareteSx";
 	pareteSx.ModelM = mat4(1.0);
 	pareteSx.ModelM = translate(pareteSx.ModelM, vec3(-50.0, 50.0, 0.0));
-	//pareteSx.ModelM = rotate(pareteSx.ModelM, radians(0.0f), vec3(1.0, 0.0, 0.0));
+	//pareteSx.ModelM = rotate(pareteSx.ModelM, radians(180.0f), vec3(0.0, 1.0, 0.0));
 	pareteSx.ModelM = scale(pareteSx.ModelM, vec3(1.0f, 50.0f, 50.0f));
 	pareteSx.sceltaVS = 1;
 	pareteSx.sceltaFS = 1;
-	pareteSx.material = MaterialType::ROSA;
+	pareteSx.material = MaterialType::YELLOW;
 	Scena.push_back(pareteSx);
 
-	//parete back
-	crea_cubo(&pareteBck, vec4(1.0));
+	//parete back | 3
+	crea_cubo(&pareteBck, vec4(1.0,1.0,1.0,0.5));
 	crea_VAO_Vector(&pareteBck);
 	pareteBck.nome = "pareteBck";
 	pareteBck.ModelM = mat4(1.0);
@@ -317,7 +317,7 @@ void INIT_VAO(void)
 	pareteBck.ModelM = scale(pareteBck.ModelM, vec3(50.0f, 50.0f, 1.0f));
 	pareteBck.sceltaVS = 1;
 	pareteBck.sceltaFS = 1;
-	pareteBck.material = MaterialType::ROSA;
+	pareteBck.material = MaterialType::YELLOW;
 	Scena.push_back(pareteBck);
 
 #pragma endregion
@@ -325,7 +325,7 @@ void INIT_VAO(void)
 #pragma region Tavolo
 
 
-//piana
+//piana | 4
 	crea_piano(&pianoTavolo, vec4(1.0));
 	crea_VAO_Vector(&pianoTavolo);
 	pianoTavolo.nome = "pianoTavolo";
@@ -335,13 +335,13 @@ void INIT_VAO(void)
 	pianoTavolo.ModelM = rotate(pianoTavolo.ModelM, radians(90.0f), vec3(1.0, 0.0, 0.0));
 	pianoTavolo.sceltaVS = 1;
 	pianoTavolo.sceltaFS = 1;
-	pianoTavolo.material = MaterialType::EMERALD;
+	pianoTavolo.material = MaterialType::MARRONE;
 	Scena.push_back(pianoTavolo);
 
-//base
+//base | 5
 	crea_cono(&sopCono, vec4(1.0, 0.0, 0.0, 1.0));
 	crea_VAO_Vector(&sopCono);
-	sopCono.nome = "sopCono";
+	sopCono.nome = "baseTavolo";
 	sopCono.ModelM = mat4(1.0);
 	sopCono.ModelM = translate(sopCono.ModelM, vec3(0.0, 0.0, 0.0));
 	sopCono.ModelM = scale(sopCono.ModelM, vec3(10.0f, 10.0f, 10.0f));
@@ -350,36 +350,54 @@ void INIT_VAO(void)
 	sopCono.sceltaFS = 1;
 	sopCono.material = MaterialType::RED_PLASTIC;
 	Scena.push_back(sopCono);
-
-	//soprammobile base
+	 
+	//soprammobile base | 6
 	crea_cilindro(&baseTavolo, vec4(1.0));
 	crea_VAO_Vector(&baseTavolo);
 	baseTavolo.ModelM = mat4(1.0);
 	baseTavolo.ModelM = translate(baseTavolo.ModelM, vec3(-10.0, 10.1, 0.0));
 	baseTavolo.ModelM = scale(baseTavolo.ModelM, vec3(3.0, 8.0, 3.0));
-	baseTavolo.nome = "baseTavolo";
+	baseTavolo.nome = "bseLampada";
 	baseTavolo.material = MaterialType::MARRONE;
 	baseTavolo.sceltaVS = 1;
 	baseTavolo.sceltaFS = 1;
 	Scena.push_back(baseTavolo);
 
-
+	//soprammobile toro | 7
+	crea_toro(&toro, vec4(1.0));
+	crea_VAO_Vector(&toro);
+	toro.ModelM = mat4(1.0);
+	toro.ModelM = translate(toro.ModelM, vec3(-10.0, 18.1, 0.0));
+	toro.ModelM = scale(toro.ModelM, vec3(3.0, 3.0, 3.0));
+	toro.nome = "topLampada";
+	toro.material = MaterialType::SNOW_WHITE;
+	toro.sceltaVS = 1;
+	toro.sceltaFS = 1;
+	Scena.push_back(toro);
 #pragma endregion
 	
 
-
-
-
 #pragma region Textures
-// texture mattoni
-	name = "mattoni.jpg";
+
+	name = "Brick.jpg";
 	path = imageDir + name;
 	textureMattoni = loadTexture(path.c_str(), 0);
 
+	name = "Leather.jpg";
+	path = imageDir + name;
+	texturePelle = loadTexture(path.c_str(), 0);
+
+	name = "Wood.jpg";
+	path = imageDir + name;
+	textureAssi = loadTexture(path.c_str(), 0);
+
+	name = "Marble.jpg";
+	path = imageDir + name;
+	textureMarmo = loadTexture(path.c_str(), 0);
+
 #pragma endregion
 
-
-
+	//oggetti importati da .obj
 #pragma region obj
 
 	name = "pochita.obj";
@@ -406,7 +424,7 @@ void INIT_VAO(void)
 	Model3D.clear();
 
 	//divano
-	name = "divano.obj";
+	name = "sofa.obj";
 	path = meshDir + name;
 	obj = loadAssImp(path.c_str(), Model3D);
 
@@ -415,9 +433,9 @@ void INIT_VAO(void)
 	{
 		crea_VAO_Vector_MeshObj(&Model3D[i]);
 		Model3D[i].ModelM = mat4(1.0);
-		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(0.0, 3.0, -35.0));
+		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(0.0, 0.2, -35.0));
 		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(30.0));
-		Model3D[i].ModelM = rotate(Model3D[i].ModelM, radians(180.0f), vec3(0.0, 1.0, 0.0));
+		Model3D[i].ModelM = rotate(Model3D[i].ModelM, radians(0.0f), vec3(0.0, 1.0, 0.0));
 		Model3D[i].nome = "Divano";
 		Model3D[i].sceltaVS = 1;
 		Model3D[i].sceltaFS = 5;
@@ -433,17 +451,6 @@ void INIT_VAO(void)
 
 #pragma endregion
 	
-
-
-
-
-	
-	
-
-
-
-
-
 }
 
 void INIT_CAMERA_PROJECTION(void)
@@ -479,6 +486,7 @@ void drawScene(void)
 	glUniformMatrix4fv(MatViewS, 1, GL_FALSE, value_ptr(View));
 	// skybox cube
 	glBindVertexArray(Scena[0].VAO);
+	glUniform1i(loc_texture, 0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
 	glDrawElements(GL_TRIANGLES, Scena[0].indici.size() * sizeof(GLuint), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
@@ -521,6 +529,29 @@ void drawScene(void)
 			glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, BUFFER_OFFSET(ind * sizeof(GLuint)));
 		} 
 
+		switch (k)
+		{
+		case 1:
+			glUniform1i(loc_texture, 0);
+			glBindTexture(GL_TEXTURE_2D, textureMarmo);
+			break;
+
+		case 5:
+			glUniform1i(loc_texture, 0);
+			glBindTexture(GL_TEXTURE_2D, textureMattoni);
+			break;
+
+		case 6:
+			glUniform1i(loc_texture, 0);
+			glBindTexture(GL_TEXTURE_2D, texturePelle);
+			break;
+		default:
+			glUniform1i(loc_texture, 0);
+			glBindTexture(GL_TEXTURE_2D, textureAssi);
+			break;
+		}
+		
+		
 
 		glDrawElements(GL_TRIANGLES, (Scena[k].indici.size() - 1) * sizeof(GLuint), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
@@ -544,7 +575,10 @@ void drawScene(void)
 			glBindVertexArray(ScenaObj[j][k].VAO);
 			glDrawElements(GL_TRIANGLES, (ScenaObj[j][k].indici.size()) * sizeof(GLuint), GL_UNSIGNED_INT, 0);
 			glBindVertexArray(0);
+			glBindTexture(GL_TEXTURE_3D, texturePelle);
+			
 		}
+
 	}
 
 	glutSwapBuffers();

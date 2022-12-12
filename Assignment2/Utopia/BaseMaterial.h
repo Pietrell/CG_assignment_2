@@ -18,9 +18,9 @@ vec3 emerald_ambient = { 0.0215, 0.04745, 0.0215 },
 GLfloat emerald_shininess = 78.8f;
 
 vec3 snow_white_ambient = { 0.2, 0.2, 0.2 }, 
-	snow_white_diffuse = { 0.95, 0.96, 0.98 }, 
+	snow_white_diffuse = { 1.0, 1.0, 1.0 }, 
 	snow_white_specular{ 0.8, 0.8, 0.8 }; 
-GLfloat snow_white_shininess = 1.78125f;
+GLfloat snow_white_shininess = 100.0f;
 
 vec3 yellow_ambient = { 0.8,	0.8,	0.0 }, 
 	yellow_diffuse = { 1.0,1.0,0.6 }, 
