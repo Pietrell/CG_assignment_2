@@ -31,14 +31,14 @@ in vec2 frag_coord_st;
  
 void main()
 {
-    if(sceltaFS == 0 || sceltaFS == 1 ||sceltaFS == 2 ||sceltaFS == 4)
+    if(sceltaFS == 0 || sceltaFS == 1 ||sceltaFS == 2 ||sceltaFS == 4) //interpolativo con texture
     {
         //Shading interpolativo
         FragColor = mix(ourColor, texture(id_tex, vec2(frag_coord_st.x, frag_coord_st.y)), 0.3);
     }         
-    else if (sceltaFS == 3)
+    else if (sceltaFS == 3) //Shading di Phong per modello di illuminazione di Phong
     {
-        //Shading di Phong per modello di illuminazione di Phong
+        
         vec3 ambient = strenght * light.power * material.ambient;
 
         //diffuse
@@ -52,13 +52,13 @@ void main()
         FragColor = vec4(ambient + diffuse + specular, 1.0);      
         FragColor = mix(FragColor, texture(id_tex, vec2(frag_coord_st.x, frag_coord_st.y)), 0.3);
     } 
-    else if (sceltaFS == 5)
+    else if (sceltaFS == 5) // interpolativo senza texture
 	{
         FragColor=ourColor;
     }
-    else if (sceltaFS == 6)
+    else if (sceltaFS == 6) //Shading di Phong per modello di illuminazione di Phong senza texturing da usare per mesh obj
 	{
-        //Shading di Phong per modello di illuminazione di Phong senza texturing da usare per mesh obj
+        
         vec3 ambient = strenght * light.power * material.ambient;
 
         //diffuse

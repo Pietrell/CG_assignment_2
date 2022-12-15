@@ -36,6 +36,7 @@ void shader_menu_function(int option)
 	if (selected_obj > -1)
 	{
 		Scena[selected_obj].sceltaVS = shaders[option].value;
+		Scena[selected_obj].sceltaFS = shaders[option].value;
 	}
 }
 

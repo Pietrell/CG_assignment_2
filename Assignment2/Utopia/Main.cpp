@@ -70,18 +70,20 @@ string skyboxDir = "Skybox/";
 */
 vector<string> faces
 {
-	".\\Skybox\\right.jpg",
+	/*".\\Skybox\\right.jpg",
 	".\\Skybox\\left.jpg",
 	".\\Skybox\\top.jpg",
 	".\\Skybox\\bottom.jpg",
 	".\\Skybox\\front.jpg",
-	".\\Skybox\\back.jpg"
-	/*skyboxDir + "front.jpg",
-	skyboxDir + "back.jpg",
-	skyboxDir + "left.jpg",
-	skyboxDir + "right.jpg",
-	skyboxDir + "top.jpg",
-	skyboxDir + "bottom.jpg"*/
+	".\\Skybox\\back.jpg"*/
+
+
+	".\\Skybox\\px.png",
+	".\\Skybox\\nx.png",
+	".\\Skybox\\py.png",
+	".\\Skybox\\ny.png",
+	".\\Skybox\\pz.png",
+	".\\Skybox\\nz.png"
 };
 
 // Creazione sfera
@@ -93,7 +95,7 @@ static vector<Material> materials;
 static vector<Shader> shaders;
 
 // Luce
-float angolo = 300.0;
+float angolo = 0.0;
 point_light light;
 LightShaderUniform light_unif = {};
 
@@ -414,12 +416,13 @@ void INIT_VAO(void)
 		Model3D[i].ModelM = rotate(Model3D[i].ModelM, radians(90.0f), vec3(0.0, 1.0, 0.0));
 		Model3D[i].nome = "Pochita";
 		Model3D[i].sceltaVS = 1;
-		Model3D[i].sceltaFS = 5;
+		Model3D[i].sceltaFS = 6;
 
 		//le bounding box vengono calcolate per ogni elemento della mesh invece che per la mesh completa
 		Model3D[i].boundingBoxMax = TrovaMax(&Model3D[i]);
 		Model3D[i].boundingBoxMin = TrovaMin(&Model3D[i]);
 	}
+	
 	ScenaObj.push_back(Model3D);
 	Model3D.clear();
 

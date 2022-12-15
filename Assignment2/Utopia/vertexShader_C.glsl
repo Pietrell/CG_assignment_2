@@ -47,9 +47,8 @@ void main()
     {
         gl_Position = Projection * View * Model * vec4(aPos, 1.0); 
     }
-    if (sceltaVS == 1)
+    if (sceltaVS == 1) //Modello di illuminazione di  Phong con shading interpolativo
     {
-        //Modello di illuminazione di  Phong con shading interpolativo
         gl_Position = Projection * View * Model * vec4(aPos, 1.0);
 
         //Trasformare le coordinate del vertice da elaborare (aPos) in coordinate di vista
@@ -83,9 +82,9 @@ void main()
         ourColor = vec4(ambient + diffuse + specular, 1.0);   
         frag_coord_st = coord_st;   
     }
-    if (sceltaVS == 2)
+    if (sceltaVS == 2)//Modello di illuminazione di Blinn-Phong con shading interpolativo
     {        
-        //Modello di illuminazione di Blinn-Phong con shading interpolativo
+        
         gl_Position = Projection * View * Model * vec4(aPos, 1.0);
 
         //Trasformare le coordinate del vertice da elaborare (aPos) in coordinate di vista
@@ -118,9 +117,9 @@ void main()
         ourColor = vec4(ambient + diffuse + specular, 1.0);
         frag_coord_st = coord_st;  
     }
-    if (sceltaVS == 3)
+    if (sceltaVS == 3)//Modello di illuminazione di Phong con shading di Phong
     {
-        //Modello di illuminazione di Phong con shading di Phong
+        
         gl_Position = Projection * View * Model * vec4(aPos, 1.0);
 
         //Trasformare le coordinate del vertice da elaborare (aPos) in coordinate di vista
@@ -141,9 +140,9 @@ void main()
 
         frag_coord_st = coord_st;
     }
-    if (sceltaVS == 4)
+    if (sceltaVS == 4) //Shader  tipo cartoon
     {
-        //Shader  tipo cartoon
+        
         gl_Position = Projection*View*Model*vec4(aPos, 1.0);
 
         //Trasformare le coordinate del vertice da elaborare (aPos) in coordinate di vista
